@@ -4,6 +4,7 @@
 #include "game.h"
 #include "state.hpp"
 #include "gui-helpers.hpp"
+#include <algorithm>
 
 namespace HostTab {
 	static void SetRoleAmount(RoleTypes__Enum type, int amount) {
@@ -175,6 +176,72 @@ namespace HostTab {
 			}
 			if (InputString("Username", &State.hostUserName)) {
 				State.Save();
+			}
+
+
+			if (ImGui::InputFloat("Kill CD", &State.KillCooldown))
+				options.SetFloat(app::FloatOptionNames__Enum::KillCooldown, State.KillCooldown);
+			if (ImGui::InputFloat("Vent CD", &State.EngineerCooldown))
+				options.SetFloat(app::FloatOptionNames__Enum::EngineerCooldown, State.EngineerCooldown);
+			if (ImGui::InputFloat("Vent time", &State.EngineerInVentMaxTime))
+				options.SetFloat(app::FloatOptionNames__Enum::EngineerInVentMaxTime, State.EngineerInVentMaxTime);
+			if (ImGui::InputFloat("Protect CD", &State.GuardianAngelCooldown))
+				options.SetFloat(app::FloatOptionNames__Enum::GuardianAngelCooldown, State.GuardianAngelCooldown);
+			if (ImGui::InputFloat("SS CD", &State.ShapeshifterCooldown))
+				options.SetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown, State.ShapeshifterCooldown);
+			if (ImGui::InputFloat("SS time", &State.ShapeshifterDuration))
+				options.SetFloat(app::FloatOptionNames__Enum::ShapeshifterDuration, State.ShapeshifterDuration);
+
+			if (ImGui::Button("0CD"))
+			{
+				State.KillCooldown = 1.4E-45f;
+				State.EngineerCooldown = 1.4E-45f;
+				State.GuardianAngelCooldown = 1.4E-45f;
+				State.ShapeshifterCooldown = 1.4E-45f;
+				options.SetFloat(app::FloatOptionNames__Enum::KillCooldown, State.KillCooldown);
+				options.SetFloat(app::FloatOptionNames__Enum::EngineerCooldown, State.EngineerCooldown);
+				options.SetFloat(app::FloatOptionNames__Enum::GuardianAngelCooldown, State.GuardianAngelCooldown);
+				options.SetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown, State.ShapeshifterCooldown);
+			}
+
+
+			bool commonTasksChanged = ImGui::InputInt("CommonTasks", &State.CommonTasks);
+			bool shortTasksChanged = ImGui::InputInt("ShortTasks", &State.ShortTasks);
+			bool longTasksChanged = ImGui::InputInt("LongTasks", &State.LongTasks);
+
+			if (commonTasksChanged || shortTasksChanged || longTasksChanged) {
+				// Ensure values are within individual limits first
+				State.CommonTasks = std::clamp(State.CommonTasks, 0, 255);
+				State.ShortTasks = std::clamp(State.ShortTasks, 0, 255);
+				State.LongTasks = std::clamp(State.LongTasks, 0, 255);
+
+				int totalTasks = State.CommonTasks + State.ShortTasks + State.LongTasks;
+				if (totalTasks > 255) {
+					int excess = totalTasks - 255;
+
+					// Adjust the most recently changed value to fit the total within 255
+					if (commonTasksChanged) {
+						State.CommonTasks = max(0, State.CommonTasks - excess);
+					}
+					else if (shortTasksChanged) {
+						State.ShortTasks = max(0, State.ShortTasks - excess);
+					}
+					else if (longTasksChanged) {
+						State.LongTasks = max(0, State.LongTasks - excess);
+					}
+
+				}
+
+				// Update values in options only if within the overall range
+				if (commonTasksChanged) {
+					options.SetInt(app::Int32OptionNames__Enum::NumCommonTasks, State.CommonTasks);
+				}
+				if (shortTasksChanged) {
+					options.SetInt(app::Int32OptionNames__Enum::NumShortTasks, State.ShortTasks);
+				}
+				if (longTasksChanged) {
+					options.SetInt(app::Int32OptionNames__Enum::NumLongTasks, State.LongTasks);
+				}
 			}
 
 			static int framesPassed = -1;

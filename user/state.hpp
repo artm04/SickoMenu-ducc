@@ -94,6 +94,19 @@ public:
 
     bool ShowKillCD = false;
 
+    int CommonTasks = 0;
+    int ShortTasks = 0;
+    int LongTasks = 0;
+
+    float EngineerCooldown = 0;
+    float EngineerInVentMaxTime = 0;
+
+
+    float GuardianAngelCooldown = 0;
+
+    float ShapeshifterCooldown = 0;
+    float ShapeshifterDuration = 0;
+
     bool ChatPaste = false;
     bool RevealRoles = false;
     bool AbbreviatedRoleNames = false;
