@@ -177,7 +177,10 @@ namespace HostTab {
 			if (InputString("Username", &State.hostUserName)) {
 				State.Save();
 			}
-
+			// PlayerSpeedMod
+			if (ImGui::InputFloat("Player Speed", &State.PlayerSpeedMod)) {
+				options.SetFloat(app::FloatOptionNames__Enum::PlayerSpeedMod, State.PlayerSpeedMod);
+			}
 
 			if (ImGui::InputFloat("Kill CD", &State.KillCooldown))
 				options.SetFloat(app::FloatOptionNames__Enum::KillCooldown, State.KillCooldown);

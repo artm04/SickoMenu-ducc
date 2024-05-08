@@ -108,6 +108,8 @@ public:
     float ShapeshifterCooldown = 0;
     float ShapeshifterDuration = 0;
 
+    float PlayerSpeedMod = 1.f;
+
     bool ChatPaste = false;
     bool RevealRoles = false;
     bool AbbreviatedRoleNames = false;
