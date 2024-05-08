@@ -177,40 +177,21 @@ namespace HostTab {
 			if (InputString("Username", &State.hostUserName)) {
 				State.Save();
 			}
+
+			// label "Lobby Settings"
+			ImGui::Text("Lobby Settings");
+
+
 			// PlayerSpeedMod
 			if (ImGui::InputFloat("Player Speed", &State.PlayerSpeedMod)) {
 				options.SetFloat(app::FloatOptionNames__Enum::PlayerSpeedMod, State.PlayerSpeedMod);
 			}
 
-			if (ImGui::InputFloat("Kill CD", &State.KillCooldown))
-				options.SetFloat(app::FloatOptionNames__Enum::KillCooldown, State.KillCooldown);
-			if (ImGui::InputFloat("Vent CD", &State.EngineerCooldown))
-				options.SetFloat(app::FloatOptionNames__Enum::EngineerCooldown, State.EngineerCooldown);
-			if (ImGui::InputFloat("Vent time", &State.EngineerInVentMaxTime))
-				options.SetFloat(app::FloatOptionNames__Enum::EngineerInVentMaxTime, State.EngineerInVentMaxTime);
-			if (ImGui::InputFloat("Protect CD", &State.GuardianAngelCooldown))
-				options.SetFloat(app::FloatOptionNames__Enum::GuardianAngelCooldown, State.GuardianAngelCooldown);
-			if (ImGui::InputFloat("SS CD", &State.ShapeshifterCooldown))
-				options.SetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown, State.ShapeshifterCooldown);
-			if (ImGui::InputFloat("SS time", &State.ShapeshifterDuration))
-				options.SetFloat(app::FloatOptionNames__Enum::ShapeshifterDuration, State.ShapeshifterDuration);
-
-			if (ImGui::Button("0CD"))
-			{
-				State.KillCooldown = 1.4E-45f;
-				State.EngineerCooldown = 1.4E-45f;
-				State.GuardianAngelCooldown = 1.4E-45f;
-				State.ShapeshifterCooldown = 1.4E-45f;
-				options.SetFloat(app::FloatOptionNames__Enum::KillCooldown, State.KillCooldown);
-				options.SetFloat(app::FloatOptionNames__Enum::EngineerCooldown, State.EngineerCooldown);
-				options.SetFloat(app::FloatOptionNames__Enum::GuardianAngelCooldown, State.GuardianAngelCooldown);
-				options.SetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown, State.ShapeshifterCooldown);
-			}
-
-
+			// Tasks amount
 			bool commonTasksChanged = ImGui::InputInt("CommonTasks", &State.CommonTasks);
 			bool shortTasksChanged = ImGui::InputInt("ShortTasks", &State.ShortTasks);
 			bool longTasksChanged = ImGui::InputInt("LongTasks", &State.LongTasks);
+
 
 			if (commonTasksChanged || shortTasksChanged || longTasksChanged) {
 				// Ensure values are within individual limits first
@@ -246,6 +227,57 @@ namespace HostTab {
 					options.SetInt(app::Int32OptionNames__Enum::NumLongTasks, State.LongTasks);
 				}
 			}
+
+			State.PlayerSpeedMod = options.GetFloat(app::FloatOptionNames__Enum::PlayerSpeedMod);
+			State.CommonTasks = options.GetInt(app::Int32OptionNames__Enum::NumCommonTasks);
+			State.ShortTasks = options.GetInt(app::Int32OptionNames__Enum::NumShortTasks);
+			State.LongTasks = options.GetInt(app::Int32OptionNames__Enum::NumLongTasks);
+
+			if (options.GetGameMode() == GameModes__Enum::HideNSeek) {
+				ImGui::Text("Hide N Seek Settings");
+				if (ImGui::InputInt("Vent Uses", &State.CrewmateVentUses))
+					options.SetInt(app::Int32OptionNames__Enum::CrewmateVentUses, State.CrewmateVentUses);
+				State.CrewmateVentUses = options.GetInt(app::Int32OptionNames__Enum::CrewmateVentUses);
+			}
+			else {
+				ImGui::Text("Roles Settings");
+				if (ImGui::InputFloat("Kill CD", &State.KillCooldown))
+					options.SetFloat(app::FloatOptionNames__Enum::KillCooldown, State.KillCooldown);
+				if (ImGui::InputFloat("Vent CD", &State.EngineerCooldown))
+					options.SetFloat(app::FloatOptionNames__Enum::EngineerCooldown, State.EngineerCooldown);
+				if (ImGui::InputFloat("Vent time", &State.EngineerInVentMaxTime))
+					options.SetFloat(app::FloatOptionNames__Enum::EngineerInVentMaxTime, State.EngineerInVentMaxTime);
+				if (ImGui::InputFloat("Protect CD", &State.GuardianAngelCooldown))
+					options.SetFloat(app::FloatOptionNames__Enum::GuardianAngelCooldown, State.GuardianAngelCooldown);
+				if (ImGui::InputFloat("SS CD", &State.ShapeshifterCooldown))
+					options.SetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown, State.ShapeshifterCooldown);
+				if (ImGui::InputFloat("SS time", &State.ShapeshifterDuration))
+					options.SetFloat(app::FloatOptionNames__Enum::ShapeshifterDuration, State.ShapeshifterDuration);
+
+
+
+				if (ImGui::Button("0CD"))
+				{
+					State.KillCooldown = 1.4E-45f;
+					State.EngineerCooldown = 1.4E-45f;
+					State.GuardianAngelCooldown = 1.4E-45f;
+					State.ShapeshifterCooldown = 1.4E-45f;
+					options.SetFloat(app::FloatOptionNames__Enum::KillCooldown, State.KillCooldown);
+					options.SetFloat(app::FloatOptionNames__Enum::EngineerCooldown, State.EngineerCooldown);
+					options.SetFloat(app::FloatOptionNames__Enum::GuardianAngelCooldown, State.GuardianAngelCooldown);
+					options.SetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown, State.ShapeshifterCooldown);
+				}
+
+				State.KillCooldown = options.GetFloat(app::FloatOptionNames__Enum::KillCooldown);
+				State.EngineerCooldown = options.GetFloat(app::FloatOptionNames__Enum::EngineerCooldown);
+				State.EngineerInVentMaxTime = options.GetFloat(app::FloatOptionNames__Enum::EngineerInVentMaxTime);
+				State.GuardianAngelCooldown = options.GetFloat(app::FloatOptionNames__Enum::GuardianAngelCooldown);
+				State.ShapeshifterCooldown = options.GetFloat(app::FloatOptionNames__Enum::ShapeshifterCooldown);
+				State.ShapeshifterDuration = options.GetFloat(app::FloatOptionNames__Enum::ShapeshifterDuration);
+			}
+
+
+
 
 			static int framesPassed = -1;
 			static bool isReviving = false;

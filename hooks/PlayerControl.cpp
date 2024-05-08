@@ -734,7 +734,7 @@ void dPlayerControl_RpcSyncSettings(PlayerControl* __this, Byte__Array* optionsB
 	catch (...) {
 		LOG_DEBUG("Exception occurred in RpcSyncSettings (PlayerControl)");
 	}
-	PlayerControl_RpcSyncSettings(__this, optionsByteArray, method);
+	//PlayerControl_RpcSyncSettings(__this, optionsByteArray, method);
 }
 
 bool dPlayerControl_get_CanMove(PlayerControl* __this, MethodInfo* method) {

@@ -109,6 +109,7 @@ public:
     float ShapeshifterDuration = 0;
 
     float PlayerSpeedMod = 1.f;
+    int CrewmateVentUses = 0;
 
     bool ChatPaste = false;
     bool RevealRoles = false;
